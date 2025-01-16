@@ -4,3 +4,6 @@ sudo systemctl start docker
 sudo usermod -aG docker $USER
 docker pull portainer/portainer-ce:latest
 docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce:latest
+wget https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/ipvlan.sh
+chmod +x ipvlan.sh
+sudo ./ipvlan.sh
