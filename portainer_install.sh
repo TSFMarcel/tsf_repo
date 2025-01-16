@@ -1,4 +1,4 @@
-#bash
+#!/bin/bash
 sudo apt install docker.io -y
 sudo systemctl start docker
 sudo usermod -aG docker $USER
