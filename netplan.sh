@@ -1,58 +1,57 @@
-import os
-import subprocess
+#!/bin/bash
 
-def main():
-    print("\nNetplan Static IP Configuration Script")
-    print("=====================================")
+CONFIG_FILE="/etc/netplan/50-cloud-init.yaml"
 
-    # Benutzer nach den erforderlichen Eingaben fragen
-    interface = input("Geben Sie den Namen des Netzwerkinterfaces ein (z. B. eth0): ")
-    static_ip = input("Geben Sie die statische IP-Adresse ein (z. B. 192.168.1.100): ")
-    subnet_mask = input("Geben Sie die Subnetzmaske ein (z. B. 255.255.255.0): ")
-    gateway = input("Geben Sie die Gateway-Adresse ein (z. B. 192.168.1.1): ")
-    dns_servers = input(
-        "Geben Sie die DNS-Server ein (kommagetrennt, z. B. 8.8.8.8,8.8.4.4): "
-    )
+# Begrüßung
+echo "Netplan Static IP Configuration Script"
+echo "====================================="
 
-    # Subnetzmaske in CIDR-Notation umwandeln
-    subnet_bits = sum([bin(int(x)).count('1') for x in subnet_mask.split('.')])
-    cidr_ip = f"{static_ip}/{subnet_bits}"
+# Benutzereingaben sammeln
+read -p "Geben Sie den Namen des Netzwerkinterfaces ein (z. B. eth0): " INTERFACE
+read -p "Geben Sie die statische IP-Adresse ein (z. B. 192.168.1.100): " STATIC_IP
+read -p "Geben Sie die Subnetzmaske ein (z. B. 255.255.255.0): " SUBNET_MASK
+read -p "Geben Sie die Gateway-Adresse ein (z. B. 192.168.1.1): " GATEWAY
+read -p "Geben Sie die DNS-Server ein (kommagetrennt, z. B. 8.8.8.8,8.8.4.4): " DNS_SERVERS
 
-    # Netplan-Konfiguration erstellen
-    netplan_config = f"""
+# Subnetzmaske in CIDR-Notation umwandeln
+IFS='.' read -r -a OCTETS <<< "$SUBNET_MASK"
+CIDR=0
+for OCTET in "${OCTETS[@]}"; do
+  CIDR=$((CIDR+$(echo "obase=2; $OCTET" | bc | grep -o 1 | wc -l)))
+done
+CIDR_IP="$STATIC_IP/$CIDR"
+
+# Alte Konfigurationsdatei sichern
+BACKUP_FILE="${CONFIG_FILE}.bak.$(date +%Y%m%d%H%M%S)"
+cp "$CONFIG_FILE" "$BACKUP_FILE"
+echo "Die aktuelle Konfigurationsdatei wurde gesichert unter: $BACKUP_FILE"
+
+# Neue Konfiguration schreiben
+cat > "$CONFIG_FILE" <<EOL
 network:
   version: 2
-  renderer: networkd
   ethernets:
-    {interface}:
+    $INTERFACE:
+      dhcp4: false
       addresses:
-        - {cidr_ip}
-      gateway4: {gateway}
+        - $CIDR_IP
+      gateway4: $GATEWAY
       nameservers:
-        addresses: [{dns_servers}]
-"""
+        addresses: [$DNS_SERVERS]
+EOL
 
-    print("\nGenerierte Netplan-Konfiguration:\n")
-    print(netplan_config)
+echo "Die neue Konfiguration wurde in $CONFIG_FILE gespeichert."
 
-    # Datei speichern
-    config_path = f"/etc/netplan/{interface}-static.yaml"
-    try:
-        with open(config_path, "w") as config_file:
-            config_file.write(netplan_config)
-        print(f"\nKonfigurationsdatei wurde erfolgreich unter {config_path} gespeichert.")
+# Netplan-Konfiguration anwenden
+read -p "Möchten Sie die neue Netplan-Konfiguration jetzt anwenden? (ja/nein): " APPLY
+if [[ "$APPLY" =~ ^(ja|yes)$ ]]; then
+  netplan apply
+  if [[ $? -eq 0 ]]; then
+    echo "Die Netplan-Konfiguration wurde erfolgreich angewendet."
+  else
+    echo "Fehler beim Anwenden der Netplan-Konfiguration. Bitte prüfen Sie die Datei: $CONFIG_FILE"
+  fi
+else
+  echo "Netplan-Konfiguration wurde nicht angewendet. Sie können dies später mit 'sudo netplan apply' tun."
+fi
 
-        # Anwenden der Netplan-Konfiguration
-        apply = input("Möchten Sie die Netplan-Konfiguration jetzt anwenden? (ja/nein): ").strip().lower()
-        if apply in ["ja", "yes"]:
-            subprocess.run(["netplan", "apply"], check=True)
-            print("Netplan-Konfiguration wurde erfolgreich angewendet.")
-        else:
-            print("Netplan-Konfiguration wurde nicht angewendet. Sie können dies später mit 'netplan apply' tun.")
-    except PermissionError:
-        print("Fehler: Keine Berechtigung, die Datei zu schreiben. Führen Sie das Skript mit 'sudo' aus.")
-    except Exception as e:
-        print(f"Ein Fehler ist aufgetreten: {e}")
-
-if __name__ == "__main__":
-    main()
