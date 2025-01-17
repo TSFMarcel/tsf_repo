@@ -14,11 +14,27 @@ read -p "Geben Sie die Gateway-Adresse ein (z. B. 192.168.1.1): " GATEWAY
 read -p "Geben Sie die DNS-Server ein (kommagetrennt, z. B. 8.8.8.8,8.8.4.4): " DNS_SERVERS
 
 # Subnetzmaske in CIDR-Notation umwandeln
-IFS='.' read -r -a OCTETS <<< "$SUBNET_MASK"
-CIDR=0
-for OCTET in "${OCTETS[@]}"; do
-  CIDR=$((CIDR+$(echo "obase=2; $OCTET" | bc | grep -o 1 | wc -l)))
-done
+function subnet_to_cidr() {
+  local subnet=$1
+  local cidr=0
+  for octet in $(echo "$subnet" | tr '.' ' '); do
+    case $octet in
+      255) cidr=$((cidr + 8)) ;;
+      254) cidr=$((cidr + 7)) ;;
+      252) cidr=$((cidr + 6)) ;;
+      248) cidr=$((cidr + 5)) ;;
+      240) cidr=$((cidr + 4)) ;;
+      224) cidr=$((cidr + 3)) ;;
+      192) cidr=$((cidr + 2)) ;;
+      128) cidr=$((cidr + 1)) ;;
+      0) ;;
+      *) echo "Ungültige Subnetzmaske: $subnet"; exit 1 ;;
+    esac
+  done
+  echo "$cidr"
+}
+
+CIDR=$(subnet_to_cidr "$SUBNET_MASK")
 CIDR_IP="$STATIC_IP/$CIDR"
 
 # Alte Konfigurationsdatei sichern
@@ -54,4 +70,3 @@ if [[ "$APPLY" =~ ^(ja|yes)$ ]]; then
 else
   echo "Netplan-Konfiguration wurde nicht angewendet. Sie können dies später mit 'sudo netplan apply' tun."
 fi
-
