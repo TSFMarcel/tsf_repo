@@ -44,3 +44,14 @@ else
 sudo wget -O "$DATEI4" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/cron_job_update.sh
 chmod +x "$DATEI4"
 fi
+
+DATEI5="/etc/scripts/first_start.sh"
+
+if [ -e "$DATEI5" ]; then
+rm "$DATEI5"
+sudo wget -O "$DATEI5" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/first_start.sh
+chmod +x "$DATEI5"
+else
+sudo wget -O "$DATEI5" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/first_start.sh
+chmod +x "$DATEI5"
+fi
