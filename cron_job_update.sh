@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# Fest definierter Pfad zum Skript
+# Pfad zum zu ausführenden Skript
 script_path="/etc/scripts/ubuntu_update.sh"
 
-# Funktion, um den Cron-Job zu aktualisieren oder hinzuzufügen
-update_cronjob() {
+# Funktion, um den systemweiten Cron-Job zu aktualisieren oder hinzuzufügen
+update_system_cronjob() {
     local minute="$1"
     local hour="$2"
     local day="$3"
     local month="$4"
     local weekday="$5"
+    local user="root"
 
     # Überprüfen, ob das Skript existiert
     if [[ ! -f "$script_path" ]]; then
@@ -17,13 +18,22 @@ update_cronjob() {
         exit 1
     fi
 
-    # Cronjob-Format erstellen
-    cron_command="$minute $hour $day $month $weekday $script_path"
+    # Cronjob-Format: <Minute> <Stunde> <Tag> <Monat> <Wochentag> <Benutzer> <Befehl>
+    cron_command="$minute $hour $day $month $weekday $user $script_path"
 
-    # Bestehenden Cron-Job suchen und aktualisieren, wenn vorhanden
-    crontab -l | grep -v "$script_path" | { cat; echo "$cron_command"; } | crontab -
+    # Prüfen, ob der Eintrag bereits in /etc/crontab existiert
+    if grep -Fq "$script_path" /etc/crontab; then
+        # Bestehenden Eintrag ersetzen
+        sudo sed -i "\|$script_path|c\\$cron_command" /etc/crontab
+        echo "Systemweiter Cron-Job aktualisiert: $cron_command"
+    else
+        # Neuen Eintrag hinzufügen
+        echo "$cron_command" | sudo tee -a /etc/crontab > /dev/null
+        echo "Systemweiter Cron-Job hinzugefügt: $cron_command"
+    fi
 
-    echo "Cron-Job wurde erfolgreich gesetzt oder aktualisiert."
+    # Neustart des Cron-Dienstes, um Änderungen anzuwenden
+    sudo service cron restart
 }
 
 # Interaktive Eingabe der Cron-Zeitfelder
@@ -36,11 +46,11 @@ read -r hour
 echo "Gib den Tag des Monats für den Cron-Job an (1-31) oder (*) für jeden Tag:"
 read -r day
 
-echo "Gib den Monat für den Cron-Job an (1-12) oder (*) für jeden Monat :"
+echo "Gib den Monat für den Cron-Job an (1-12) oder (*) für jeden Monat:"
 read -r month
 
 echo "Gib den Wochentag für den Cron-Job an (0-6, 0=Sonntag) oder (*) für jeden Wochentag:"
 read -r weekday
 
 # Cron-Job setzen oder aktualisieren
-update_cronjob "$minute" "$hour" "$day" "$month" "$weekday"
+update_system_cronjob "$minute" "$hour" "$day" "$month" "$weekday"
