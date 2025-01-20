@@ -33,3 +33,14 @@ else
 sudo wget -O "$DATEI3" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/netplan.sh
 chmod +x "$DATEI3"
 fi
+
+DATEI4="/etc/scripts/cron_job_update.sh"
+
+if [ -e "$DATEI4" ]; then
+rm "$DATEI4"
+sudo wget -O "$DATEI4" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/cron_job_update.sh
+chmod +x "$DATEI4"
+else
+sudo wget -O "$DATEI4" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/cron_job_update.sh
+chmod +x "$DATEI4"
+fi
