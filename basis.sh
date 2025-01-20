@@ -12,7 +12,7 @@ sudo wget -O "$DATEI" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/
 chmod +x "$DATEI"
 fi
 
-DATEI2="/etc/scripts/ipvlan_ubuntu.sh"
+DATEI2="/etc/scripts/ipvlan.sh"
 
 if [ -e "$DATEI2" ]; then
 rm "$DATEI2"
