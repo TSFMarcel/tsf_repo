@@ -3,10 +3,9 @@
 CONFIG_FILE="/etc/netplan/50-cloud-init.yaml"
 
 # Begrüßung
-echo "====================================="
-echo "Netplan Static IP Configuration Script"
-echo "====================================="
-
+echo -e "${GREEN}===============================================${NC}"
+echo -e "${GREEN}Netplan Static IP Configuration Script${NC}"
+echo -e "${GREEN}===============================================${NC}"
 # Benutzereingaben sammeln
 read -p "Geben Sie den Namen des Netzwerkinterfaces ein (z. B. eth0): " INTERFACE
 read -p "Geben Sie die statische IP-Adresse ein (z. B. 192.168.1.100): " STATIC_IP
