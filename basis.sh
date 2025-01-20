@@ -56,7 +56,7 @@ sudo wget -O "$DATEI5" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI5"
 fi
 
-DATEI6="/etc/scripts/first_start.sh"
+DATEI6="/etc/scripts/portainer_install.sh"
 
 if [ -e "$DATEI6" ]; then
 rm "$DATEI6"
