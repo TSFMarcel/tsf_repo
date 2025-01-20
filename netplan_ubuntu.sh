@@ -3,6 +3,7 @@
 CONFIG_FILE="/etc/netplan/50-cloud-init.yaml"
 
 # Begrüßung
+echo "====================================="
 echo "Netplan Static IP Configuration Script"
 echo "====================================="
 
