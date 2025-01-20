@@ -27,10 +27,10 @@ DATEI3="/etc/scripts/netplan_ubuntu.sh"
 
 if [ -e "$DATEI3" ]; then
 rm "$DATEI3"
-sudo wget -O "$DATEI3" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/netplan.sh
+sudo wget -O "$DATEI3" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/netplan_ubuntu.sh
 chmod +x "$DATEI3"
 else
-sudo wget -O "$DATEI3" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/netplan.sh
+sudo wget -O "$DATEI3" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/netplan_ubuntu.sh
 chmod +x "$DATEI3"
 fi
 
