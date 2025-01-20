@@ -27,8 +27,7 @@ update_cronjob() {
 }
 
 # Interaktive Eingabe der Cron-Zeitfelder
-echo 
-"Gib den Minutenwert für den Cron-Job an (0-59) oder (*) für jede Minute:"
+echo "Gib den Minutenwert für den Cron-Job an (0-59) oder (*) für jede Minute:"
 read -r minute
 
 echo "Gib den Stundenwert für den Cron-Job an (0-23) oder (*) für jede Stunde:"
