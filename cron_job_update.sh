@@ -1,7 +1,7 @@
 #!/bin/bash
-echo "==============================================="
+echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}Cronjob Script für Automatische Ubuntu Updates${NC}"
-echo "==============================================="
+echo -e "${GREEN}===============================================${NC}"
 # Pfad zum zu ausführenden Skript
 script_path="/etc/scripts/ubuntu_update.sh"
 
