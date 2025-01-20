@@ -7,8 +7,8 @@ echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}IPvlan-Netzwerk-Erstellungs-Skript für Docker gestartet...${NC}"
 echo -e "${GREEN}===============================================${NC}"
 # Eingaben des Benutzers abfragen
-read -p "Geben Sie das Subnetz (z. B. 192.168.1.0/24): " SUBNET
-read -p "Geben Sie das Gateway (z. B. 192.168.1.1): " GATEWAY
+read -p "$(echo -e "${CYAN}Geben Sie das Subnetz (z. B. 192.168.1.0/24): ${NC}")" SUBNET
+read -p "$(echo -e "${CYAN}Geben Sie das Gateway (z. B. 192.168.1.1): ${NC}")" GATEWAY
 read -p "Geben Sie das Parent-Interface an (z.B eth0, Standard/TSF eth0): " PARENT_INTERFACE
 read -p "Möchten Sie den IPvlan-Modus angeben? (l2/l3, Standard/TSF: l2): " IPVLAN_MODE
 
