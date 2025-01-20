@@ -1,5 +1,7 @@
 #!/bin/bash
 GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+NC='\033[0m' # Keine Farbe
 CONFIG_FILE="/etc/netplan/50-cloud-init.yaml"
 
 # Begrüßung
@@ -7,11 +9,11 @@ echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}Netplan Static IP Configuration Script${NC}"
 echo -e "${GREEN}===============================================${NC}"
 # Benutzereingaben sammeln
-read -p "Geben Sie den Namen des Netzwerkinterfaces ein (z. B. eth0): " INTERFACE
-read -p "Geben Sie die statische IP-Adresse ein (z. B. 192.168.1.100): " STATIC_IP
-read -p "Geben Sie die Subnetzmaske ein (z. B. 255.255.255.0): " SUBNET_MASK
-read -p "Geben Sie die Gateway-Adresse ein (z. B. 192.168.1.1): " GATEWAY
-read -p "Geben Sie die DNS-Server ein (kommagetrennt, z. B. 8.8.8.8,8.8.4.4): " DNS_SERVERS
+read -p "$(echo -e "${CYAN}Geben Sie den Namen des Netzwerkinterfaces ein (z. B. eth0): ${NC}")" INTERFACE
+read -p "$(echo -e "${CYAN}Geben Sie die statische IP-Adresse ein (z. B. 192.168.1.100): ${NC}")" STATIC_IP
+read -p "$(echo -e "${CYAN}Geben Sie die Subnetzmaske ein (z. B. 255.255.255.0): ${NC}")" SUBNET_MASK
+read -p "$(echo -e "${CYAN}Geben Sie die Gateway-Adresse ein (z. B. 192.168.1.1): ${NC}")" GATEWAY
+read -p "$(echo -e "${CYAN}Geben Sie die DNS-Server ein (kommagetrennt, z. B. 8.8.8.8,8.8.4.4): ${NC}")" DNS_SERVERS
 
 # Subnetzmaske in CIDR-Notation umwandeln
 function subnet_to_cidr() {
