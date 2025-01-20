@@ -3,9 +3,9 @@
 # Farben für die Ausgabe
 GREEN='\033[0;32m'
 NC='\033[0m' # Keine Farbe
-
+echo "====================================="
 echo -e "${GREEN}IPvlan-Netzwerk-Erstellungs-Skript gestartet...${NC}"
-
+echo "====================================="
 # Eingaben des Benutzers abfragen
 read -p "Geben Sie das Subnetz (z. B. 192.168.1.0/24): " SUBNET
 read -p "Geben Sie das Gateway (z. B. 192.168.1.1): " GATEWAY
