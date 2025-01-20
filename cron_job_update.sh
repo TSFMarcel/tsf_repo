@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fest definierter Pfad zum Skript
-script_path="/pfad/zum/anderen/skript.sh"
+script_path="/etc/scripts/ubuntu_update.sh"
 
 # Funktion, um den Cron-Job zu aktualisieren oder hinzuzufügen
 update_cronjob() {
