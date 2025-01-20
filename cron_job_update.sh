@@ -27,19 +27,20 @@ update_cronjob() {
 }
 
 # Interaktive Eingabe der Cron-Zeitfelder
-echo "Gib den Minutenwert für den Cron-Job an (0-59):"
+echo 
+"Gib den Minutenwert für den Cron-Job an (0-59) oder (*) für jede Minute:"
 read -r minute
 
-echo "Gib den Stundenwert für den Cron-Job an (0-23):"
+echo "Gib den Stundenwert für den Cron-Job an (0-23) oder (*) für jede Stunde:"
 read -r hour
 
-echo "Gib den Tag des Monats für den Cron-Job an (1-31):"
+echo "Gib den Tag des Monats für den Cron-Job an (1-31) oder (*) für jeden Tag:"
 read -r day
 
-echo "Gib den Monat für den Cron-Job an (1-12):"
+echo "Gib den Monat für den Cron-Job an (1-12) oder (*) für jeden Monat :"
 read -r month
 
-echo "Gib den Wochentag für den Cron-Job an (0-6, 0=Sonntag):"
+echo "Gib den Wochentag für den Cron-Job an (0-6, 0=Sonntag) oder (*) für jeden Wochentag:"
 read -r weekday
 
 # Cron-Job setzen oder aktualisieren
