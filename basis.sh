@@ -55,3 +55,15 @@ else
 sudo wget -O "$DATEI5" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/first_start.sh
 chmod +x "$DATEI5"
 fi
+
+DATEI6="/etc/scripts/first_start.sh"
+
+if [ -e "$DATEI6" ]; then
+rm "$DATEI6"
+sudo wget -O "$DATEI6" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/portainer_install.sh
+chmod +x "$DATEI6"
+else
+sudo wget -O "$DATEI6" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/portainer_install.sh
+chmod +x "$DATEI6"
+fi
+
