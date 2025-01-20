@@ -12,7 +12,7 @@ sudo wget -O "$DATEI" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/
 chmod +x "$DATEI"
 fi
 
-DATEI2="/etc/scripts/ipvlan.sh"
+DATEI2="/etc/scripts/ipvlan_ubuntu.sh"
 
 if [ -e "$DATEI2" ]; then
 rm "$DATEI2"
@@ -23,7 +23,7 @@ sudo wget -O "$DATEI2" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI2"
 fi
 
-DATEI3="/etc/scripts/netplan.sh"
+DATEI3="/etc/scripts/netplan_ubuntu.sh"
 
 if [ -e "$DATEI3" ]; then
 rm "$DATEI3"
