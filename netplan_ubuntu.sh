@@ -1,5 +1,5 @@
 #!/bin/bash
-
+GREEN='\033[0;32m'
 CONFIG_FILE="/etc/netplan/50-cloud-init.yaml"
 
 # Begrüßung
