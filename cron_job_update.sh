@@ -1,4 +1,5 @@
 #!/bin/bash
+GREEN='\033[0;32m'
 echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}Cronjob Script für Automatische Ubuntu Updates${NC}"
 echo -e "${GREEN}===============================================${NC}"
