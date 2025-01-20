@@ -2,6 +2,7 @@
 
 # Farben für die Ausgabe
 GREEN='\033[0;32m'
+CYAN='\033[0;36m'
 NC='\033[0m' # Keine Farbe
 echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}IPvlan-Netzwerk-Erstellungs-Skript für Docker gestartet...${NC}"
