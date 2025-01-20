@@ -5,9 +5,14 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 RESET="\033[0m"
 
-# Pfad und GitHub-URL
-SCRIPT_PATH="/etc/scripts/ubuntu_update.sh"
-GITHUB_URL="https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update_ubuntu.sh"
+# Basis-Skriptordner
+SCRIPT_FOLDER="/etc/scripts"
+declare -A SCRIPTS=(
+    ["ubuntu_update.sh"]="https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update_ubuntu.sh"
+    ["ipvlan.sh"]="https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/ipvlan.sh"
+    ["netplan.sh"]="https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/netplan.sh"
+    ["ersatz.sh"]="https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/ersatz.sh"
+)
 
 # Funktion: Cron-Zeit abfragen
 function ask_cron_time() {
@@ -43,39 +48,50 @@ sudo systemctl start cron
 sudo systemctl enable cron
 echo -e "${GREEN}cron-Dienst ist gestartet und aktiviert.${RESET}"
 
-# Skript herunterladen
-echo -e "${GREEN}Herunterladen des Skripts von GitHub...${RESET}"
-if wget -O "$SCRIPT_PATH" "$GITHUB_URL"; then
-    echo -e "${GREEN}Skript erfolgreich heruntergeladen nach $SCRIPT_PATH${RESET}"
-else
-    echo -e "${RED}Fehler beim Herunterladen des Skripts!${RESET}"
-    exit 1
+# Skripte-Ordner erstellen
+if [ ! -d "$SCRIPT_FOLDER" ]; then
+    echo -e "${GREEN}Erstelle Skript-Ordner: $SCRIPT_FOLDER${RESET}"
+    sudo mkdir -p "$SCRIPT_FOLDER"
 fi
 
-# Skript ausführbar machen
-echo -e "${GREEN}Setze Berechtigungen...${RESET}"
-chmod +x "$SCRIPT_PATH"
-echo -e "${GREEN}Skript ist ausführbar.${RESET}"
+# Skripte herunterladen und Cronjobs hinzufügen
+for script in "${!SCRIPTS[@]}"; do
+    SCRIPT_PATH="$SCRIPT_FOLDER/$script"
+    GITHUB_URL="${SCRIPTS[$script]}"
 
-# Überprüfen, ob ein Cronjob bereits existiert
-EXISTING_CRONTAB=$(crontab -l 2>/dev/null | grep "$SCRIPT_PATH")
-if [[ -n "$EXISTING_CRONTAB" ]]; then
-    echo -e "${GREEN}Ein bestehender Cronjob für das Skript wurde gefunden:${RESET}"
-    echo "$EXISTING_CRONTAB"
-    echo -e "${GREEN}Der bestehende Cronjob wird aktualisiert.${RESET}"
+    echo -e "${GREEN}Herunterladen des Skripts $script von GitHub...${RESET}"
+    if wget -O "$SCRIPT_PATH" "$GITHUB_URL"; then
+        echo -e "${GREEN}Skript $script erfolgreich heruntergeladen nach $SCRIPT_PATH${RESET}"
+    else
+        echo -e "${RED}Fehler beim Herunterladen des Skripts $script!${RESET}"
+        continue
+    fi
 
-    # Bestehenden Cronjob entfernen
-    (crontab -l 2>/dev/null | grep -v "$SCRIPT_PATH") | crontab -
-else
-    echo -e "${GREEN}Kein bestehender Cronjob für das Skript gefunden.${RESET}"
-fi
+    # Skript ausführbar machen
+    echo -e "${GREEN}Setze Berechtigungen für $script...${RESET}"
+    chmod +x "$SCRIPT_PATH"
+    echo -e "${GREEN}Skript $script ist ausführbar.${RESET}"
 
-# Cron-Zeit abfragen
-ask_cron_time
+    # Überprüfen, ob ein Cronjob bereits existiert
+    EXISTING_CRONTAB=$(crontab -l 2>/dev/null | grep "$SCRIPT_PATH")
+    if [[ -n "$EXISTING_CRONTAB" ]]; then
+        echo -e "${GREEN}Ein bestehender Cronjob für $script wurde gefunden:${RESET}"
+        echo "$EXISTING_CRONTAB"
+        echo -e "${GREEN}Der bestehende Cronjob wird aktualisiert.${RESET}"
 
-# Neuen/aktualisierten Cronjob hinzufügen
-CRON_JOB="$MINUTE $HOUR $DAY $MONTH $WEEKDAY $SCRIPT_PATH"
-(crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+        # Bestehenden Cronjob entfernen
+        (crontab -l 2>/dev/null | grep -v "$SCRIPT_PATH") | crontab -
+    else
+        echo -e "${GREEN}Kein bestehender Cronjob für $script gefunden.${RESET}"
+    fi
 
-echo -e "${GREEN}Cronjob wurde hinzugefügt oder aktualisiert:${RESET}"
-echo "$CRON_JOB"
+    # Cron-Zeit abfragen
+    ask_cron_time
+
+    # Neuen/aktualisierten Cronjob hinzufügen
+    CRON_JOB="$MINUTE $HOUR $DAY $MONTH $WEEKDAY $SCRIPT_PATH"
+    (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+
+    echo -e "${GREEN}Cronjob für $script wurde hinzugefügt oder aktualisiert:${RESET}"
+    echo "$CRON_JOB"
+done
