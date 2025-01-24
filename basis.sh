@@ -67,3 +67,17 @@ sudo wget -O "$DATEI6" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI6"
 fi
 
+# Cronjob-Definition
+CRON_JOB="0 3 * * 1 /usr/bin/docker image prune -a -f"
+
+# Entfernen eines eventuell vorhandenen Eintrags, bevor er neu hinzugefügt wird
+(crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
+
+# Cronjob neu hinzufügen
+(crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+
+echo "Cronjob wurde aktualisiert: $CRON_JOB"
+
+# Aktuelle Cronjobs anzeigen
+echo "Aktuelle Cronjobs:"
+crontab -l
