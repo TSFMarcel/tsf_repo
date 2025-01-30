@@ -25,4 +25,4 @@ docker network create -d ipvlan \
   -o parent="$PARENT_INTERFACE" \
   -o ipvlan_mode="$IPVLAN_MODE" \
   --attachable \
-  ipvlan_net
+  ipvlan_network
