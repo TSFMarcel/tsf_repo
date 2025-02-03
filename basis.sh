@@ -67,6 +67,17 @@ sudo wget -O "$DATEI6" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI6"
 fi
 
+DATEI7="/etc/scripts/nginx-proxy-manager.sh"
+
+if [ -e "$DATEI6" ]; then
+rm "$DATEI7"
+sudo wget -O "$DATEI7" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/nginx-proxy-manager.sh
+chmod +x "$DATEI7"
+else
+sudo wget -O "$DATEI7" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/nginx-proxy-manager.sh
+chmod +x "$DATEI7"
+fi
+
 # Cronjob-Definition
 CRON_JOB="0 3 * * 1 /usr/bin/docker image prune -a -f"
 
