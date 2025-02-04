@@ -9,3 +9,7 @@ docker run -d \
   -v "/var/lib/docker/volumes/npm/data:/data" \
   -v "/var/lib/docker/volumes/npm/letsencrypt:/etc/letsencrypt" \
   docker.io/jc21/nginx-proxy-manager:latest
+echo Der Nginx Proxy Manager wurde gestartet und ist unter https:// $(ip a show eth0 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1) erreichbar.
+echo Die Zugangsdaten lauten:
+echo Benutzer: "admin@example.com"
+echo Passwort: "changeme"
