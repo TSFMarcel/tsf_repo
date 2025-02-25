@@ -17,7 +17,7 @@ function log_message() {
 log_message "${GREEN}Starte das Update-Skript...${RESET}"
 
 # System bereinigen
-log_message "${GREEN}Führe apt clean aus, um den lokalen Paket-Cache zu bereinigen...${RESET}"
+log_message "${GREEN}Führe apt clean aus...${RESET}"
 if sudo apt clean -y >> "$LOG_FILE" 2>&1; then
     log_message "${GREEN}apt clean abgeschlossen.${RESET}"
 else
@@ -25,7 +25,7 @@ else
     exit 1
 fi
 
-log_message "${GREEN}Führe apt autoremove aus, um nicht mehr benötigte Pakete zu entfernen...${RESET}"
+log_message "${GREEN}Führe apt autoremove aus...${RESET}"
 if sudo apt autoremove -y >> "$LOG_FILE" 2>&1; then
     log_message "${GREEN}apt autoremove abgeschlossen.${RESET}"
 else
@@ -48,6 +48,19 @@ if sudo apt upgrade -y >> "$LOG_FILE" 2>&1; then
 else
     log_message "${RED}Fehler bei apt upgrade.${RESET}"
     exit 1
+fi
+
+# Prüfen, ob linux-azure bereits installiert ist
+if dpkg -l | grep -q "linux-azure"; then
+    log_message "${GREEN}linux-azure ist bereits installiert. Überspringe Installation.${RESET}"
+else
+    log_message "${GREEN}Installiere linux-azure...${RESET}"
+    if sudo apt-get install -y linux-azure >> "$LOG_FILE" 2>&1; then
+        log_message "${GREEN}linux-azure erfolgreich installiert.${RESET}"
+    else
+        log_message "${RED}Fehler bei der Installation von linux-azure.${RESET}"
+        exit 1
+    fi
 fi
 
 log_message "${GREEN}Updates erfolgreich abgeschlossen.${RESET}"
