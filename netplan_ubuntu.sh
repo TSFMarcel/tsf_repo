@@ -63,15 +63,3 @@ EOL
 
 echo "Die neue Konfiguration wurde in $CONFIG_FILE gespeichert."
 
-# Netplan-Konfiguration anwenden
-read -p "Möchten Sie die neue Netplan-Konfiguration jetzt anwenden? (ja/nein): " APPLY
-if [[ "$APPLY" =~ ^(ja|yes|ja)$ ]]; then
-  netplan apply
-  if [[ $? -eq 0 ]]; then
-    echo "Die Netplan-Konfiguration wurde erfolgreich angewendet."
-  else
-    echo "Fehler beim Anwenden der Netplan-Konfiguration. Bitte prüfen Sie die Datei: $CONFIG_FILE"
-  fi
-else
-  echo "Netplan-Konfiguration wurde nicht angewendet. Sie können dies später mit 'sudo netplan apply' tun."
-fi
