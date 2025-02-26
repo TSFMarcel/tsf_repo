@@ -8,6 +8,7 @@ CONFIG_FILE="/etc/netplan/50-cloud-init.yaml"
 echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}Netplan Static IP Configuration Script${NC}"
 echo -e "${GREEN}===============================================${NC}"
+
 # Benutzereingaben sammeln
 read -p "$(echo -e "${CYAN}Geben Sie den Namen des Netzwerkinterfaces ein (z. B. eth0): ${NC}")" INTERFACE
 read -p "$(echo -e "${CYAN}Geben Sie die statische IP-Adresse ein (z. B. 192.168.1.100): ${NC}")" STATIC_IP
@@ -53,7 +54,9 @@ network:
       dhcp4: false
       addresses:
         - $CIDR_IP
-      gateway4: $GATEWAY
+      routes:
+        - to: 0.0.0.0/0
+          via: $GATEWAY
       nameservers:
         addresses: [$DNS_SERVERS]
 EOL
@@ -62,7 +65,7 @@ echo "Die neue Konfiguration wurde in $CONFIG_FILE gespeichert."
 
 # Netplan-Konfiguration anwenden
 read -p "Möchten Sie die neue Netplan-Konfiguration jetzt anwenden? (ja/nein): " APPLY
-if [[ "$APPLY" =~ ^(ja|yes)$ ]]; then
+if [[ "$APPLY" =~ ^(ja|yes|ja)$ ]]; then
   netplan apply
   if [[ $? -eq 0 ]]; then
     echo "Die Netplan-Konfiguration wurde erfolgreich angewendet."
