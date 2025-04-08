@@ -39,9 +39,14 @@ else
 fi
 
 # Container starten
-echo "▶️ Starte Docker-Container wieder..."
+echo "▶️ Starte MongoDB-Container ($MONGO_CONTAINER)..."
 docker start "$MONGO_CONTAINER"
-sleep 5  # kurze Pause, damit Mongo vor UniFi verfügbar ist
+
+# Wartezeit
+echo "⏳ Warte 60 Sekunden, damit MongoDB vollständig starten kann..."
+sleep 60
+
+echo "▶️ Starte UniFi-Controller-Container ($UNIFI_CONTAINER)..."
 docker start "$UNIFI_CONTAINER"
 
-echo "✅ Fertig! Container laufen wieder."
+echo "✅ Alles erledigt! Beide Container laufen wieder."
