@@ -69,13 +69,24 @@ fi
 
 DATEI7="/etc/scripts/nginx-proxy-manager.sh"
 
-if [ -e "$DATEI6" ]; then
+if [ -e "$DATEI7" ]; then
 rm "$DATEI7"
 sudo wget -O "$DATEI7" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/nginx-proxy-manager.sh
 chmod +x "$DATEI7"
 else
 sudo wget -O "$DATEI7" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/nginx-proxy-manager.sh
 chmod +x "$DATEI7"
+fi
+
+DATEI8="/etc/scripts/unifi-fix.sh"
+
+if [ -e "$DATEI8" ]; then
+rm "$DATEI8"
+sudo wget -O "$DATEI8" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/unifi-fix.sh
+chmod +x "$DATEI8"
+else
+sudo wget -O "$DATEI8" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/unifi-fix.sh
+chmod +x "$DATEI8"
 fi
 
 # Cronjob-Definition
