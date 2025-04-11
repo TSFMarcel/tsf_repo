@@ -100,17 +100,19 @@ sudo wget -O "$DATEI9" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI9"
 fi
 
-# Cronjob-Definition
-CRON_JOB="0 3 * * 1 /usr/bin/docker image prune -a -f"
-
-# Entfernen eines eventuell vorhandenen Eintrags, bevor er neu hinzugefügt wird
+# 🕒 Cronjob 1: Docker Image Prune
+CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
+(crontab -l 2>/dev/null; echo "$CRON_JOB1") | crontab -
+echo "Cronjob wurde aktualisiert: $CRON_JOB1"
 
-# Cronjob neu hinzufügen
-(crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+# 🔁 Cronjob 2: Speicher erweitern beim Boot
+CRON_JOB2="@reboot sudo /etc/scripts/speicher-erweitern.sh"
+(crontab -l 2>/dev/null | grep -v "/etc/scripts/speicher-erweitern.sh") | crontab -
+(crontab -l 2>/dev/null; echo "$CRON_JOB2") | crontab -
+echo "Cronjob wurde aktualisiert: $CRON_JOB2"
 
-echo "Cronjob wurde aktualisiert: $CRON_JOB"
-
-# Aktuelle Cronjobs anzeigen
+# 📋 Aktuelle Cronjobs anzeigen
 echo "Aktuelle Cronjobs:"
 crontab -l
+
