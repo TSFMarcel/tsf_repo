@@ -89,7 +89,7 @@ sudo wget -O "$DATEI8" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI8"
 fi
 
-DATEI9="/etc/scripts/unifi-fix.sh"
+DATEI9="/etc/scripts/speicher-erweitern.sh"
 
 if [ -e "$DATEI9" ]; then
 rm "$DATEI9"
