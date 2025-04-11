@@ -89,6 +89,17 @@ sudo wget -O "$DATEI8" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI8"
 fi
 
+DATEI9="/etc/scripts/unifi-fix.sh"
+
+if [ -e "$DATEI9" ]; then
+rm "$DATEI9"
+sudo wget -O "$DATEI9" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/speicher-erweitern.sh
+chmod +x "$DATEI9"
+else
+sudo wget -O "$DATEI9" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/speicher-erweitern.sh
+chmod +x "$DATEI9"
+fi
+
 # Cronjob-Definition
 CRON_JOB="0 3 * * 1 /usr/bin/docker image prune -a -f"
 
