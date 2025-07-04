@@ -15,9 +15,28 @@ else
     echo "✅ 'parted' ist bereits installiert."
 fi
 
+echo "🔧 Prüfe, ob 'gdisk' installiert ist..."
+if ! command -v gdisk >/dev/null 2>&1; then
+    echo "📦 'gdisk' fehlt – wird jetzt installiert..."
+    sudo apt update
+    sudo apt install -y gdisk
+else
+    echo "✅ 'gdisk' ist bereits installiert."
+fi
+
+echo "🔧 Versuche GPT Backup-Header zu reparieren mit sgdisk..."
+if sudo sgdisk --move-second-header "$DISK_PATH"; then
+    echo "✅ GPT Backup-Header erfolgreich repariert."
+else
+    echo "⚠️ GPT Reparatur mit sgdisk fehlgeschlagen oder nicht nötig."
+fi
+
 echo "🔍 Vergleiche Partitionsgröße mit Diskgröße..."
-disk_size=$(lsblk -bno SIZE "$DISK_PATH")
-pv_size=$(lsblk -bno SIZE "$PV_PATH")
+disk_size=$(lsblk -bno SIZE -d "$DISK_PATH")
+pv_size=$(lsblk -bno SIZE "$PV_PATH" | head -n1)
+
+echo "Disk Größe: $disk_size Bytes"
+echo "Partition Größe: $pv_size Bytes"
 
 if [ "$disk_size" -gt "$pv_size" ]; then
     echo "📐 Vergrößere Partition 3 auf volle Größe..."
