@@ -1,4 +1,17 @@
 #!/bin/bash
+# Farben für die Ausgabe
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+RESET="\033[0m"
+
+# Log-Datei definieren
+LOG_FILE="/var/log/unifi.log"
+
+# Funktion zum Loggen
+function log_message() {
+    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
 # convert_unifi_mongo_dynamic_install.sh
 # Installiert Docker falls nötig, liest MongoDB IP + Env aus und erstellt docker-compose.yml für Mongo + Unifi
 
