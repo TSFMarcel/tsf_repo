@@ -156,7 +156,7 @@ if [[ "$cron_choice" =~ ^[Jj]$ ]]; then
     # Cronjob hinzufügen (nur, wenn nicht bereits vorhanden)
     (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
 
-    log_message "${GREEN}Cronjob erfolgreich eingerichtet:${RESET} $CRON_ENTRY"
+    echo "${GREEN}Cronjob erfolgreich eingerichtet:${RESET} $CRON_ENTRY"
 else
-    log_message "${RED}Es wird kein Cronjob für automatische Updates eingerichtet.${RESET}"
+    echo "${RED}Es wird kein Cronjob für automatische Updates eingerichtet.${RESET}"
 fi
