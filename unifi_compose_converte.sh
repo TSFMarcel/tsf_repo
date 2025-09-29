@@ -149,7 +149,7 @@ if [[ "$cron_choice" =~ ^[Jj]$ ]]; then
     echo "Bitte geben Sie den Wochentag (0-6, 0=Sonntag, oder * für jeden) ein:"
     read -r cron_weekday
 
-    CRON_ENTRY="$cron_minute $cron_hour $cron_day $cron_month $cron_weekday $CRON_SCRIPT >> /var/log/unifi_compose_update.log 2>&1"
+    CRON_ENTRY="$cron_minute $cron_hour $cron_day $cron_month $cron_weekday $CRON_SCRIPT"
 
     # Cronjob hinzufügen (nur, wenn nicht bereits vorhanden)
     (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
