@@ -60,8 +60,6 @@ sudo mkdir -p "$BASE_DIR"
 
 # 5️⃣ Compose-Datei schreiben mit restart: always
 cat > "$BASE_DIR/docker-compose.yml" <<EOF
-version: '3.9'
-
 services:
   mongodb:
     image: mongo:7.0
