@@ -6,6 +6,18 @@ RESET="\033[0m"
 
 # convert_unifi_mongo_dynamic_install.sh
 # Installiert Docker falls nötig, liest MongoDB IP + Env aus und erstellt docker-compose.yml für Mongo + Unifi
+# Prüfen ob IPVLAN "ipvlan_net" oder "ipvlan_network" heißt.
+# Prüfen, welches Netzwerk existiert
+if docker network ls --format '{{.Name}}' | grep -q '^ipvlan_net$'; then
+    DOCKER_NET="ipvlan_net"
+elif docker network ls --format '{{.Name}}' | grep -q '^ipvlan_network$'; then
+    DOCKER_NET="ipvlan_network"
+else
+    echo "Kein ipvlan-Netzwerk gefunden! Bitte eines erstellen."
+    exit 1
+fi
+
+echo "Verwende Docker-Netzwerk: $DOCKER_NET"
 
 # Container-Namen
 MONGO_CONTAINER="mongoDB-Unifi"
@@ -68,7 +80,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
     restart: always
     networks:
-      ipvlan_net:
+      $DOCKER_NET:
         ipv4_address: $MONGO_IP
     environment:
       MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
@@ -104,7 +116,7 @@ services:
       - /var/lib/docker/unifi:/config
 
 networks:
-  ipvlan_net:
+  $DOCKER_NET:
     external: true
 EOF
 
