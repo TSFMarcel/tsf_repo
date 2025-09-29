@@ -64,7 +64,19 @@ else
 fi
 
 log_message "${GREEN}Updates erfolgreich abgeschlossen.${RESET}"
+#Docker-Compose installieren
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # Optional: Neustart des Systems
 log_message "${GREEN}Starte das System neu...${RESET}"
 if sudo reboot >> "$LOG_FILE" 2>&1; then
@@ -73,3 +85,4 @@ else
     log_message "${RED}Fehler beim Neustarten des Systems.${RESET}"
     exit 1
 fi
+
