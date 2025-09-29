@@ -100,6 +100,28 @@ sudo wget -O "$DATEI9" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs
 chmod +x "$DATEI9"
 fi
 
+DATEI10="/etc/scripts/unifi_compose_converte.sh"
+
+if [ -e "$DATEI10" ]; then
+rm "$DATEI10"
+sudo wget -O "$DATEI10" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/unifi_compose_converte.sh
+chmod +x "$DATEI10"
+else
+sudo wget -O "$DATEI10" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/unifi_compose_converte.sh
+chmod +x "$DATEI10"
+fi
+
+DATEI11="/etc/scripts/unifi_compose_update.sh"
+
+if [ -e "$DATEI11" ]; then
+rm "$DATEI11"
+sudo wget -O "$DATEI11" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/unifi_compose_update.sh
+chmod +x "$DATEI11"
+else
+sudo wget -O "$DATEI11" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/unifi_compose_update.sh
+chmod +x "$DATEI11"
+fi
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
