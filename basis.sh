@@ -122,6 +122,18 @@ sudo wget -O "$DATEI11" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI11"
 fi
 
+##Herunterladen und erstellen eines Cronjobs um den Unifi Container immer wieder bei Fehler zu starten.
+DATEI12="/etc/scripts/check_unifi.sh"
+
+if [ -e "$DATEI12" ]; then
+rm "$DATEI12"
+sudo wget -O "$DATEI12" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/check_unifi.sh
+chmod +x "$DATEI12"
+else
+sudo wget -O "$DATEI12" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/check_unifi.sh
+chmod +x "$DATEI12"
+fi
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
