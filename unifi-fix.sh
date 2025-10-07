@@ -49,4 +49,30 @@ sleep 60
 echo "▶️ Starte UniFi-Controller-Container ($UNIFI_CONTAINER)..."
 docker start "$UNIFI_CONTAINER"
 
+##Herunterladen und erstellen eines Cronjobs um den Unifi Container immer wieder bei Fehler zu starten.
+DATEI12="/etc/scripts/check_unifi.sh"
+
+if [ -e "$DATEI12" ]; then
+rm "$DATEI12"
+sudo wget -O "$DATEI12" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/check_unifi.sh
+chmod +x "$DATEI12"
+else
+sudo wget -O "$DATEI12" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/check_unifi.sh
+chmod +x "$DATEI12"
+fi
+
+#!/bin/bash
+
+# Name deines Check-Skripts
+CHECK_SCRIPT="/etc/scripts/check_unifi.sh"
+
+# Cron-Eintrag (alle 5 Minuten)
+CRON_INTERVAL="* */1 * * *"
+
+# Cronjob hinzufügen (nur wenn er noch nicht existiert)
+( crontab -l 2>/dev/null | grep -v "$CHECK_SCRIPT" ; echo "$CRON_INTERVAL $CHECK_SCRIPT >> /var/log/container_check.log 2>&1" ) | crontab -
+
+
 echo "✅ Alles erledigt! Beide Container laufen wieder."
+
+
