@@ -134,6 +134,39 @@ sudo wget -O "$DATEI12" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI12"
 fi
 
+DATEI13="/etc/scripts/cron_job_update_proxmox.sh"
+
+if [ -e "$DATEI4" ]; then
+rm "$DATEI13"
+sudo wget -O "$DATEI13" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/cron_job_update_proxmox.sh
+chmod +x "$DATEI13"
+else
+sudo wget -O "$DATEI13" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/cron_job_update_proxmox.sh
+chmod +x "$DATEI13"
+fi
+
+DATEI14="/etc/scripts/first_start_proxmox.sh"
+
+if [ -e "$DATEI14" ]; then
+rm "$DATEI14"
+sudo wget -O "$DATEI14" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/first_start_proxmox.sh
+chmod +x "$DATEI14"
+else
+sudo wget -O "$DATEI14" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/first_start_proxmox.sh
+chmod +x "$DATEI14"
+fi
+
+DATEI15="/etc/scripts/ubuntu_update_proxmox.sh"
+
+if [ -e "$DATEI15" ]; then
+rm "$DATEI15"
+sudo wget -O "$DATEI15" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/ubuntu_update_proxmox.sh
+chmod +x "$DATEI15"
+else
+sudo wget -O "$DATEI15" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/ubuntu_update_proxmox.sh
+chmod +x "$DATEI15"
+fi
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
