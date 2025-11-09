@@ -54,6 +54,7 @@ log_message "${GREEN}Updates erfolgreich abgeschlossen.${RESET}"
 
 # Docker & Docker Compose installieren
 sudo apt update
+systemctl disable hv-kvp-daemon.service
 sudo apt install -y ca-certificates curl gnupg lsb-release
 
 sudo mkdir -p /etc/apt/keyrings
