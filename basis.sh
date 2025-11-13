@@ -167,6 +167,17 @@ sudo wget -O "$DATEI15" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI15"
 fi
 
+DATEI16="/etc/scripts/portainer_update_fix.sh"
+
+if [ -e "$DATEI16" ]; then
+rm "$DATEI16"
+sudo wget -O "$DATEI16" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/portainer_update_fix.sh
+chmod +x "$DATEI16"
+else
+sudo wget -O "$DATEI16" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/portainer_update_fix.sh
+chmod +x "$DATEI16"
+fi
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
