@@ -178,6 +178,7 @@ sudo wget -O "$DATEI16" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI16"
 fi
 
+mkdir /etc/scripts/update
 DATEI17="/etc/scripts/update/basis.sh"
 
 if [ -e "$DATEI17" ]; then
