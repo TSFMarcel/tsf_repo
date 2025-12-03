@@ -1,60 +1,76 @@
-#!/bin/bash
-GREEN='\033[0;32m'
-NC='\033[0m' # Keine Farbe
-echo -e "${GREEN}===============================================${NC}"
-echo -e "${GREEN}Cronjob Script für Automatische Ubuntu Updates${NC}"
-echo -e "${GREEN}===============================================${NC}"
-# Pfad zum zu ausführenden Skript
-script_path="/etc/scripts/update/ubuntu_update.sh"
+#!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────────────────
+# Cron‑Job‑Setup‑Script (Ubuntu Updates) – Whiptail‑Variante
+# ─────────────────────────────────────────────────────────────────────────
 
-# Funktion, um den systemweiten Cron-Job zu aktualisieren oder hinzuzufügen
+# ------------------- Farben (nur für die initiale Ausgabe) ---------------
+GREEN="\033[0;32m"
+NC="\033[0m"
+
+echo -e "${GREEN}=================================================${NC}"
+echo -e "${GREEN}Cronjob‑Setup für Automatische Ubuntu Updates${NC}"
+echo -e "${GREEN}=================================================${NC}"
+echo
+
+# ------------------- Pfad zum Update‑Skript ------------------------------
+SCRIPT_PATH="/etc/scripts/update/ubuntu_update.sh"
+
+# ------------------- Log‑Funktion (optional) -----------------------------
+LOG_FILE="/var/log/cron_setup.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+log() { echo "$(date '+%Y-%m-%d %H:%M:%S') – $1" | tee -a "$LOG_FILE"; }
+
+# ------------------- Cron‑Job‑Austausch/Einfügung -----------------------
 update_system_cronjob() {
-    local minute="$1"
-    local hour="$2"
-    local day="$3"
-    local month="$4"
-    local weekday="$5"
+    local minute="$1" hour="$2" day="$3" month="$4" weekday="$5"
     local user="root"
 
-    # Überprüfen, ob das Skript existiert
-    if [[ ! -f "$script_path" ]]; then
-        echo "Das angegebene Skript existiert nicht: $script_path"
+    # Prüfen, ob das Skript existiert
+    if [[ ! -f "$SCRIPT_PATH" ]]; then
+        log "❌ Das Skript $SCRIPT_PATH existiert nicht."
         exit 1
     fi
 
-    # Cronjob-Format: <Minute> <Stunde> <Tag> <Monat> <Wochentag> <Benutzer> <Befehl>
-    cron_command="$minute $hour $day $month $weekday $user $script_path"
+    # Cron‑Format: <M> <H> <T> <M> <W> <Benutzer> <Befehl>
+    local cron_cmd="$minute $hour $day $month $weekday $user $SCRIPT_PATH"
 
-    # Prüfen, ob der Eintrag bereits in /etc/crontab existiert
-    if grep -Fq "$script_path" /etc/crontab; then
-        # Bestehenden Eintrag ersetzen
-        sudo sed -i "\|$script_path|c\\$cron_command" /etc/crontab
-        echo "Systemweiter Cron-Job aktualisiert: $cron_command"
+    # Ist der Eintrag schon vorhanden?
+    if grep -Fq "$SCRIPT_PATH" /etc/crontab; then
+        sudo sed -i "\|$SCRIPT_PATH|c\\$cron_cmd" /etc/crontab
+        log "✅ Systemweiter Cron‑Job aktualisiert: $cron_cmd"
     else
-        # Neuen Eintrag hinzufügen
-        echo "$cron_command" | sudo tee -a /etc/crontab > /dev/null
-        echo "Systemweiter Cron-Job hinzugefügt: $cron_command"
+        echo "$cron_cmd" | sudo tee -a /etc/crontab > /dev/null
+        log "✅ Systemweiter Cron‑Job hinzugefügt: $cron_cmd"
     fi
 
-    # Neustart des Cron-Dienstes, um Änderungen anzuwenden
+    # Änderungen aktivieren
     sudo service cron restart
+    log "🔄 Cron‑Dienst neu gestartet."
 }
 
-# Interaktive Eingabe der Cron-Zeitfelder
-echo "Gib den Minutenwert für den Cron-Job an (0-59) oder (*) für jede Minute:"
-read -r minute
+# ------------------- Whiptail‑Abfragen -------------------------------
+minute=$(whiptail --inputbox "Minutenwert (0‑59 oder '*'):" 10 60 "*" 3>&1 1>&2 2>&3)
+if [[ $? -ne 0 ]]; then exit 0; fi
 
-echo "Gib den Stundenwert für den Cron-Job an (0-23) oder (*) für jede Stunde:"
-read -r hour
+hour=$(whiptail --inputbox "Stundenwert (0‑23 oder '*'):" 10 60 "*" 3>&1 1>&2 2>&3)
+[[ $? -ne 0 ]] && exit 0
 
-echo "Gib den Tag des Monats für den Cron-Job an (1-31) oder (*) für jeden Tag:"
-read -r day
+day=$(whiptail --inputbox "Tag des Monats (1‑31 oder '*'):" 10 60 "*" 3>&1 1>&2 2>&3)
+[[ $? -ne 0 ]] && exit 0
 
-echo "Gib den Monat für den Cron-Job an (1-12) oder (*) für jeden Monat:"
-read -r month
+month=$(whiptail --inputbox "Monat (1‑12 oder '*'):" 10 60 "*" 3>&1 1>&2 2>&3)
+[[ $? -ne 0 ]] && exit 0
 
-echo "Gib den Wochentag für den Cron-Job an (0-6, 0=Sonntag) oder (*) für jeden Wochentag:"
-read -r weekday
+weekday=$(whiptail --inputbox "Wochentag (0‑6, 0=Sonntag oder '*'):" 10 60 "*" 3>&1 1>&2 2>&3)
+[[ $? -ne 0 ]] && exit 0
 
-# Cron-Job setzen oder aktualisieren
+# ------------------- Bestätigung -------------------------
+if ! whiptail --yesno "Cron‑Job setzen mit folgenden Werten?\n\n$minute $hour $day $month $weekday root $SCRIPT_PATH" 12 70; then
+    log "❌ Vorgang abgebrochen."
+    exit 0
+fi
+
+# ------------------- Job setzen/aktualisieren -------------------------
 update_system_cronjob "$minute" "$hour" "$day" "$month" "$weekday"
+
+log "✅ Cron‑Job‑Setup abgeschlossen."
