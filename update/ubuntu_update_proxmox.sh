@@ -129,4 +129,4 @@ if sudo reboot >> "$LOG_FILE" 2>&1; then
 else
     log_message "${RED}Fehler beim Neustarten des Systems.${RESET}"
     exit 1
-fif
+fi
