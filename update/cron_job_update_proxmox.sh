@@ -12,7 +12,7 @@ echo -e "${GREEN}Cronjob Script für automatische Ubuntu‑Updates${NC}"
 echo -e "${GREEN}==============================${NC}"
 
 # --------------------- Pfad zum Update‑Skript -------------
-SCRIPT_PATH="/etc/scripts/ubuntu_update_proxmox.sh"
+SCRIPT_PATH="/etc/scripts/update/ubuntu_update_proxmox.sh"
 
 # ---------------------------------------------
 # Funktion zum Setzen bzw. Ersetzen des systemweiten

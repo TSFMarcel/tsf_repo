@@ -1,7 +1,16 @@
+#First Start Script für Proxmox VE
+
+# Log‑Datei
+LOG_FILE="/var/log/setup_all.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+log() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"; }
+
 # ---------------------------------------------------------------------
 # Reihenfolge der Schritte festlegen
 # ---------------------------------------------------------------------
 # Text‑Beschreibungen – Reihenfolge bestimmt die Abfrage‑Reihenfolge
+
+
 DESCS=(
     "Portainer Installation"
     "Portainer Agent Installation (nur nötig, um diese Instanz über eine andere zu steuern)"
@@ -12,11 +21,11 @@ DESCS=(
 
 # zugehörige Skripte – gleiche Indizes wie in DESCS
 SCRIPTS=(
-    "/etc/scripts/portainer_install.sh"
-    "/etc/scripts/portainer_agent_install.sh"
-    "/etc/scripts/ipvlan.sh"
-    "/etc/scripts/cron_job_update_proxmox.sh"
-    "/etc/scripts/ubuntu_update_proxmox.sh"
+    "/etc/scripts/update/portainer_install.sh"
+    "/etc/scripts/update/portainer_agent_install.sh"
+    "/etc/scripts/update/ipvlan.sh"
+    "/etc/scripts/update/cron_job_update_proxmox.sh"
+    "/etc/scripts/update/ubuntu_update_proxmox.sh"
 )
 
 # ---------------------------------------------------------------------

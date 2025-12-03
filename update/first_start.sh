@@ -17,7 +17,7 @@ log() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"; }
 
 # 1. Whiptail‑Installation (immer ausführen)
 log "$GREEN Führe whiptail_install.sh aus...${RESET}"
-if sudo /etc/scripts/whiptail_install.sh; then
+if sudo /etc/scripts/update/whiptail_install.sh; then
     log "$GREEN Whiptail erfolgreich installiert.${RESET}"
 else
     log "$RED Fehler bei whiptail_install.sh.${RESET}"
@@ -38,11 +38,11 @@ fi
 
 case "$CHOICE" in
     1)
-        SCRIPT="/etc/scripts/first_start_proxmox.sh"
+        SCRIPT="/etc/scripts/update/first_start_proxmox.sh"
         ENV="Proxmox"
         ;;
     2)
-        SCRIPT="/etc/scripts/first_start_hyperv.sh"
+        SCRIPT="/etc/scripts/update/first_start_hyperv.sh"
         ENV="Hyper‑V"
         ;;
     *)

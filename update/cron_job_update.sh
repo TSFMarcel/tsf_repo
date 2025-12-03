@@ -5,7 +5,7 @@ echo -e "${GREEN}===============================================${NC}"
 echo -e "${GREEN}Cronjob Script für Automatische Ubuntu Updates${NC}"
 echo -e "${GREEN}===============================================${NC}"
 # Pfad zum zu ausführenden Skript
-script_path="/etc/scripts/ubuntu_update.sh"
+script_path="/etc/scripts/update/ubuntu_update.sh"
 
 # Funktion, um den systemweiten Cron-Job zu aktualisieren oder hinzuzufügen
 update_system_cronjob() {

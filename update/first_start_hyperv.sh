@@ -3,7 +3,6 @@
 # Wrapper‑Skript: Whiptail‑Installation + optionale Ausführung
 # (Reihenfolge wird garantiert beibehalten)
 # ─────────────────────────────────────────────────────────────────────
-
 # Farben – ausschließlich für die Log‑Ausgabe, nicht im Whiptail‑Fenster
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -20,6 +19,7 @@ log() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"; }
 # Beschreibungen in exakt der gewünschten Reihenfolge
 DESCS=(
     "Portainer Installation"
+    "Portainer Edge Agent Installation (nur nötig, um diese Instanz über eine andere zu steuern)"
     "IPVLAN festlegen"
     "Cron‑Job für Updates erstellen"
     "Netplan‑Konfiguration"
@@ -28,11 +28,12 @@ DESCS=(
 
 # Entsprechende Skripte – gleiche Indizes wie in DESCS
 SCRIPTS=(
-    "/etc/scripts/portainer_install.sh"
-    "/etc/scripts/ipvlan.sh"
-    "/etc/scripts/cron_job_update.sh"
-    "/etc/scripts/netplan_ubuntu.sh"
-    "/etc/scripts/ubuntu_update.sh"
+    "/etc/scripts/update/portainer_install.sh"
+    "/etc/scripts/update/portainer_edge_agent.sh"
+    "/etc/scripts/update/ipvlan.sh"
+    "/etc/scripts/update/cron_job_update.sh"
+    "/etc/scripts/update/netplan_ubuntu.sh"
+    "/etc/scripts/update/ubuntu_update.sh"
 )
 
 # ─────────────────────────────────────────────────────────────────────

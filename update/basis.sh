@@ -178,6 +178,39 @@ sudo wget -O "$DATEI16" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI16"
 fi
 
+DATEI17="/etc/scripts/update/first_start_hyperv.sh"
+
+if [ -e "$DATEI17" ]; then
+rm "$DATEI17"
+sudo wget -O "$DATEI17" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/first_start_hyperv.sh
+chmod +x "$DATEI17"
+else
+sudo wget -O "$DATEI17" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/first_start_hyperv.sh
+chmod +x "$DATEI17"
+fi
+
+DATEI18="/etc/scripts/update/whiptail_install.sh"
+
+if [ -e "$DATEI18" ]; then
+rm "$DATEI18"
+sudo wget -O "$DATEI18" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/whiptail_install.sh
+chmod +x "$DATEI18"
+else
+sudo wget -O "$DATEI18" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/whiptail_install.sh
+chmod +x "$DATEI18"
+fi
+
+DATEI19="/etc/scripts/update/portainer_edge_agent_install.sh"
+
+if [ -e "$DATEI19" ]; then
+rm "$DATEI19"
+sudo wget -O "$DATEI19" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/portainer_edge_agent_install.sh
+chmod +x "$DATEI19"
+else
+sudo wget -O "$DATEI19" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/portainer_edge_agent_install.sh
+chmod +x "$DATEI19"
+fi
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -

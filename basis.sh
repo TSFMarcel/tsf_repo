@@ -178,6 +178,19 @@ sudo wget -O "$DATEI16" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI16"
 fi
 
+DATEI17="/etc/scripts/update/basis.sh"
+
+if [ -e "$DATEI17" ]; then
+rm "$DATEI17"
+sudo wget -O "$DATEI17" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/basis.sh
+chmod +x "$DATEI17"
+else
+sudo wget -O "$DATEI17" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/basis.sh
+chmod +x "$DATEI17"
+fi
+
+bash /etc/scripts/update/basis.sh
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
