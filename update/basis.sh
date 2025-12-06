@@ -211,6 +211,8 @@ sudo wget -O "$DATEI19" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI19"
 fi
 
+DATEI20="/etc/scripts/update/portainer_agent_install.sh"
+
 if [ -e "$DATEI20" ]; then
 rm "$DATEI20"
 sudo wget -O "$DATEI20" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/portainer_agent_install.sh
@@ -219,6 +221,8 @@ else
 sudo wget -O "$DATEI20" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/portainer_agent_install.sh
 chmod +x "$DATEI20"
 fi
+
+DATEI21="/etc/scripts/update/netbird_setup.sh"
 
 if [ -e "$DATEI21" ]; then
 rm "$DATEI21"
