@@ -211,6 +211,24 @@ sudo wget -O "$DATEI19" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI19"
 fi
 
+if [ -e "$DATEI20" ]; then
+rm "$DATEI20"
+sudo wget -O "$DATEI20" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/portainer_agent_install.sh
+chmod +x "$DATEI20"
+else
+sudo wget -O "$DATEI20" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/portainer_agent_install.sh
+chmod +x "$DATEI20"
+fi
+
+if [ -e "$DATEI21" ]; then
+rm "$DATEI21"
+sudo wget -O "$DATEI21" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/netbird_setup.sh
+chmod +x "$DATEI21"
+else
+sudo wget -O "$DATEI21" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/netbird_setup.sh
+chmod +x "$DATEI21"
+fi
+
 # 🕒 Cronjob 1: Docker Image Prune
 CRON_JOB1="0 3 * * 1 /usr/bin/docker image prune -a -f"
 (crontab -l 2>/dev/null | grep -v "/usr/bin/docker image prune -a -f") | crontab -
