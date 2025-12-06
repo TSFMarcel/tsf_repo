@@ -20,7 +20,7 @@ DESCS=(
 # -------- zugehörige Skripte ----------
 SCRIPTS=(
     "/etc/scripts/update/portainer_install.sh"
-    "/etc/scripts/update/portainer_edge_agent_install.sh"
+    "/etc/scripts/update/portainer_agent_install.sh"
     "/etc/scripts/update/ipvlan.sh"
     "/etc/scripts/update/cron_job_update_proxmox.sh"
     "/etc/scripts/update/ubuntu_update_proxmox.sh"

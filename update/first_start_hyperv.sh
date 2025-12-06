@@ -29,7 +29,7 @@ DESCS=(
 # Entsprechende Skripte – gleiche Indizes wie in DESCS
 SCRIPTS=(
     "/etc/scripts/update/portainer_install.sh"
-    "/etc/scripts/update/portainer_edge_agent_install.sh"
+    "/etc/scripts/update/portainer_agent_install.sh"
     "/etc/scripts/update/ipvlan.sh"
     "/etc/scripts/update/cron_job_update.sh"
     "/etc/scripts/update/netplan_ubuntu.sh"
