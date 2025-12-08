@@ -1,87 +1,52 @@
-#!/bin/bash
-
-# --- KONFIGURATION ---
+#!/usr/bin/env bash
+# ----------------------------------------------------------
+# Update‑/Netzwerk‑Tool‑Menu mit Platzhaltern (Gruppierung)
+# ----------------------------------------------------------
 SCRIPT_DIR="/etc/scripts/update"
-TITLE="⚙️ Server-Automatisierungsmenü"
-MENU_TEXT="Wähle eine Aktion aus der Liste:"
-# ---------------------
 
-# Funktion zur Ausführung externer Skripte
-execute_script() {
-    local script_name="$1"
-    local script_path="$SCRIPT_DIR/$script_name"
-    
-    if [ ! -f "$script_path" ]; then
-        whiptail --msgbox "FEHLER: Skript $script_path nicht gefunden! Stelle sicher, dass die Datei existiert." 10 70
-        return 1
-    fi
-    
-    whiptail --infobox "Starte Skript: $script_name..." 8 60
-    sleep 2
-    
-    # Ausführung des Skripts
-    bash "$script_path"
-    
-    whiptail --msgbox "Skript $script_name beendet. Drücke OK, um zum Menü zurückzukehren." 10 70
-}
+# Whiptail muss installiert sein
+if ! command -v whiptail >/dev/null 2>&1; then
+  echo "Fehler: whiptail ist nicht installiert."
+  exit 1
+fi
 
-# Hauptmenü-Schleife
 while true; do
-    CHOICE=$(whiptail --title "$TITLE" --menu "$MENU_TEXT" 25 85 15 \
-    "A.1" "Proxmox - Update von Ubuntu" \
-    "A.2" "Proxmox Host - Cronjob für automatische Updates erstellen/aktualisieren" \
-    "---" "--------------------------------------------------------" \
-    "B.1" "HyperV - Update von Ubuntu" \
-    "B.2" "HyperV - Cronjob für automatische Updates erstellen/aktualisieren" \
-    "B.3" "HyperV - Feste IP-Adresse festlegen (Netplan)" \
-    "---" "--------------------------------------------------------" \
-    "C.1" "Nachinstallieren von Portainer (Management-Interface)" \
-    "C.2" "Installation des Portainer Agents zur Fernverwaltung" \
-    "C.3" "IPVLAN für Docker anlegen (vorerst nur eines möglich)" \
-    "C.4" "Netbird Agent installieren und einrichten" \
-    "---" "--------------------------------------------------------" \
-    "EXIT" "Skript beenden" \
-    3>&1 1>&2 2>&3)
-    
-    if [ $? -ne 0 ] || [ "$CHOICE" == "EXIT" ]; then
-        whiptail --msgbox "Skript wird beendet. Tschüss!" 8 45
-        exit 0
-    fi
-    
-    # Verarbeite die Auswahl
-    case "$CHOICE" in
-        "A.1")
-            execute_script "ubuntu_update_proxmox.sh"
-            ;;
-        "A.2")
-            execute_script "cron_job_update_proxmox.sh"
-            ;;
-        "B.1")
-            execute_script "ubuntu_update.sh"
-            ;;
-        "B.2")
-            execute_script "cron_job_update.sh"
-            ;;
-        "B.3")
-            execute_script "netplan_ubuntu.sh"
-            ;;
-        "C.1")
-            execute_script "portainer_install.sh"
-            ;;
-        "C.2")
-            execute_script "portainer_agent_install.sh"
-            ;;
-        "C.3")
-            execute_script "ipvlan.sh"
-            ;;
-        "C.4")
-            execute_script "netbird_setup.sh"
-            ;;
-        "---")
-            # Ignoriere Trennlinien
-            ;;
-        *)
-            whiptail --msgbox "Ungültige Auswahl." 8 45
-            ;;
-    esac
+  CHOICE=$(whiptail --title "Update‑ und Netzwerk‑Tool‑Menu" \
+            --menu "Wähle aus was du tun möchtest:" 24 80 12 \
+            "1" "─────────────────────Proxmox Hostsystem──────────────────" \
+            "1.1" "Update von Ubuntu" \
+            "1.2" "Cronjob für automatische Updates erstellen/aktualisieren" \
+            "2" "────────────────────HyperV Hostsystem────────────────────" \
+            "2.1" "Update von Ubuntu" \
+            "2.2" "Cronjob für automatische Updates erstellen/aktualisieren" \
+            "2.3" "Feste IP‑Adresse festlegen (Netplan)" \
+            "3" "──────────────────────────Docker──────────────────────────" \
+            "3.1" "Nachinstallieren von Portainer (Management‑Interface)" \
+            "3.2" "Installation des Portainer Agents zur Fernverwaltung" \
+            "3.3" "IPVLAN für Docker anlegen (vorerst nur eines möglich)" \
+            "3.4" "Netbird Agent installieren und einrichten" \
+            "4" "──────────────────────────────────────────────────────────" \
+            "q"   "Beenden" 3>&1 1>&2 2>&3)
+
+  # ESC / X
+  if [[ $? -ne 0 ]]; then
+    echo "Abbruch."
+    exit 1
+  fi
+
+  case "$CHOICE" in
+    "1.1") bash "$SCRIPT_DIR/ubuntu_update_proxmox.sh" ;;
+    "1.2") bash "$SCRIPT_DIR/cron_job_update_proxmox.sh" ;;
+    "2.1") bash "$SCRIPT_DIR/ubuntu_update.sh" ;;
+    "2.2") bash "$SCRIPT_DIR/cron_job_update.sh" ;;
+    "2.3") bash "$SCRIPT_DIR/netplan_ubuntu.sh" ;;
+    "3.1") bash "$SCRIPT_DIR/portainer_install.sh" ;;
+    "3.2") bash "$SCRIPT_DIR/portainer_agent_install.sh" ;;
+    "3.3") bash "$SCRIPT_DIR/ipvlan.sh" ;;
+    "3.4") bash "$SCRIPT_DIR/netbird_setup.sh" ;;
+    "q")   echo "Programm beendet."; exit 0 ;;
+    # Platzhalter‑Zeilen – nichts tun
+    "1"|"2"|"3"|"4") ;;
+    *)     echo "Ungültige Auswahl." ;;
+  esac
 done

@@ -6,10 +6,20 @@
 GREEN="\033[0;32m"
 RED="\033[0;31m"
 RESET="\033[0m"
+MARKER="/home/dockervm/.first_start_done"
 
 LOG_FILE="/var/log/first_start.log"
 mkdir -p "$(dirname "$LOG_FILE")"
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"; }
+
+# Falls Marker existiert -> sofort beenden
+[[ -f "$MARKER" ]] && exit 0
+
+# Root-Eskalation
+if [[ $EUID -ne 0 ]]; then
+    echo "Erhöhe Rechte ... bitte Passwort eingeben:"
+    exec sudo bash "$0" "$@"
+fi
 
 # ------------------------------------------------------------
 # Wrapper‑Skript: Whiptail‑Installation + optionale Ausführung
@@ -64,3 +74,7 @@ else
     log "${RED}Fehler beim Ausführen von $SCRIPT.${RESET}"
     exit 1
 fi
+touch "$MARKER"
+chown dockervm:dockervm "$MARKER"
+
+echo "Erststart abgeschlossen."
