@@ -222,15 +222,37 @@ sudo wget -O "$DATEI20" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI20"
 fi
 
-DATEI21="/etc/scripts/update/netbird_setup.sh"
+DATEI21="/etc/scripts/update/every_login.sh"
 
 if [ -e "$DATEI21" ]; then
 rm "$DATEI21"
-sudo wget -O "$DATEI21" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/netbird_setup.sh
+sudo wget -O "$DATEI21" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/every_login.sh
 chmod +x "$DATEI21"
 else
-sudo wget -O "$DATEI21" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/netbird_setup.sh
+sudo wget -O "$DATEI21" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/every_login.sh
 chmod +x "$DATEI21"
+fi
+
+DATEI22="/etc/scripts/update/netbird_setup.sh"
+
+if [ -e "$DATEI22" ]; then
+rm "$DATEI22"
+sudo wget -O "$DATEI22" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/netbird_setup.sh
+chmod +x "$DATEI22"
+else
+sudo wget -O "$DATEI22" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/update/netbird_setup.sh
+chmod +x "$DATEI22"
+fi
+
+DATEI23="/etc/scripts/profil_start.sh"
+
+if [ -e "$DATEI23" ]; then
+rm "$DATEI23"
+sudo wget -O "$DATEI23" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/profil_start.sh
+chmod +x "$DATEI23"
+else
+sudo wget -O "$DATEI23" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/profil_start.sh
+chmod +x "$DATEI23"
 fi
 
 # 🕒 Cronjob 1: Docker Image Prune
