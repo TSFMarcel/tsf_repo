@@ -244,14 +244,14 @@ sudo wget -O "$DATEI22" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/ref
 chmod +x "$DATEI22"
 fi
 
-DATEI23="/etc/scripts/profil_start.sh"
+DATEI23="/etc/scripts/generate_link.sh"
 
 if [ -e "$DATEI23" ]; then
 rm "$DATEI23"
-sudo wget -O "$DATEI23" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/profil_start.sh
+sudo wget -O "$DATEI23" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/generate_link.sh
 chmod +x "$DATEI23"
 else
-sudo wget -O "$DATEI23" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/profil_start.sh
+sudo wget -O "$DATEI23" https://raw.githubusercontent.com/TSFMarcel/tsf_repo/refs/heads/main/generate_link.sh
 chmod +x "$DATEI23"
 fi
 
