@@ -15,8 +15,8 @@ if [[ ! -f "$PROFILE_D" ]]; then
 if [[ \$- == *i* ]] && [[ -t 0 ]]; then
     echo
     echo "==========================================================="
-    echo "Willkommen \$USER!"
-    echo "Tippe 'menu' um das Update- und Netzwerk-Menü zu starten."
+    echo "Willkommen"
+    echo "Tippe 'sudo menu' um das Menü der DockerVM zu öffnen."
     echo "==========================================================="
     echo
 fi
