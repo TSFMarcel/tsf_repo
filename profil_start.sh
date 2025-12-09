@@ -1,33 +1,40 @@
 #!/usr/bin/env bash
+# Setup: Login-Hinweis + menu Befehl systemweit
 
-PROFILE="/home/dockervm/.profile"
+MENU_SCRIPT="/etc/scripts/update/every_login.sh"
+LINK_PATH="/usr/local/bin/menu"
+PROFILE_D="/etc/profile.d/every_login.sh"
 
-BLOCK_START="# >>> FIRSTSTART BLOCK >>>"
-BLOCK_END="# <<< FIRSTSTART BLOCK <<<"
+# ---------------- 1. Profile.d Datei ----------------
+if [[ ! -f "$PROFILE_D" ]]; then
+    echo "Erstelle /etc/profile.d/every_login.sh für alle Benutzer..."
+    cat << EOF | sudo tee "$PROFILE_D" > /dev/null
+#!/usr/bin/env bash
+# >>> EVERY-LOGIN HINWEIS FÜR ALLE BENUTZER >>>
 
-BLOCK_CONTENT=$(cat << 'EOF'
-# >>> FIRSTSTART BLOCK >>>
-MARKER="/home/dockervm/.first_start_done"
-
-if [[ -t 1 ]]; then
-    if [[ ! -f "$MARKER" ]]; then
-        /etc/scripts/update/first_start.sh
-    else
-        /etc/scripts/update/every_login.sh
-    fi
+if [[ \$- == *i* ]] && [[ -t 0 ]]; then
+    echo
+    echo "==========================================================="
+    echo "Willkommen \$USER!"
+    echo "Tippe 'menu' um das Update- und Netzwerk-Menü zu starten."
+    echo "==========================================================="
+    echo
 fi
-# <<< FIRSTSTART BLOCK <<<
+
+# <<< EVERY-LOGIN HINWEIS <<<
 EOF
-)
-
-# Prüfen, ob Block schon existiert
-if grep -q "$BLOCK_START" "$PROFILE"; then
-    echo "Block existiert bereits – überspringe."
+    sudo chmod +x "$PROFILE_D"
 else
-    echo "Füge Block in .profile ein..."
-    echo "" >> "$PROFILE"
-    echo "$BLOCK_CONTENT" >> "$PROFILE"
+    echo "/etc/profile.d/every_login.sh existiert bereits – überspringe."
 fi
 
-# Eigentümer korrigieren
-chown dockervm:dockervm "$PROFILE"
+# ---------------- 2. Symbolischer Link ----------------
+if [[ ! -L "$LINK_PATH" ]]; then
+    echo "Erstelle symbolischen Link $LINK_PATH → $MENU_SCRIPT"
+    sudo ln -s "$MENU_SCRIPT" "$LINK_PATH"
+    sudo chmod +x "$MENU_SCRIPT"
+else
+    echo "Symbolischer Link $LINK_PATH existiert bereits – überspringe."
+fi
+
+echo "Setup abgeschlossen!"
